@@ -20,22 +20,18 @@ exports.main = async (event, context) => {
   }).get();
   
   if(book_info.data[0]._openid === OPENID){
-    try{
-      await bookCollection.doc(book_info.data[0]._id).update({
-        data: {
-          back_time: new Date().toLocaleDateString(),
-          status: 1,
-        }
-      });
+    await bookCollection.doc(book_info.data[0]._id).update({
+      data: {
+        back_time: new Date().toLocaleDateString(),
+        status: 1,
+      }
+    });
 
-      await userCollection.doc(user_info.data[0]._id).update({
-        data: {
-          reading_status: 0,
-        }
-      })
-    }catch(e){
-      console.log(e);
-    }
+    await userCollection.doc(user_info.data[0]._id).update({
+      data: {
+        reading_status: 0,
+      }
+    })
     return 1;
   }else{
     return '请让书籍拥有者扫码确认还书！'

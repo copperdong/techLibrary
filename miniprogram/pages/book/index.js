@@ -3,7 +3,8 @@ Page({
   data: {
     mode:'',
     isbn:'',
-    bookInfo:{}
+    bookInfo:{},
+    shareLock:false,
   },
 
   onShareAppMessage: function (res) {
@@ -93,35 +94,45 @@ Page({
 
   uploadBookInfoToStore(){
     const that = this;
-    var bookInfo = that.data.bookInfo;
-    var userInfo = app.globalData.userInfo;
+    let bookInfo = that.data.bookInfo;
+    let userInfo = app.globalData.userInfo;
     const db = wx.cloud.database();
-
-    bookInfo['sharer'] = userInfo.nickName;
-    bookInfo['add_time'] = new Date().toLocaleDateString();
-    bookInfo['status'] = 1;
-
-    db.collection('book_info').where({
-      isbn13: bookInfo.isbn13
-    }).get().then((res)=>{
-      if(res.data.length > 0){
-        wx.showToast({
-          title: '已收录该图书',
-          success(){
+    let shareLock = that.data.shareLock;
+    if(!shareLock){
+      that.setData({
+        shareLock:true,
+      })
+      bookInfo['sharer'] = userInfo.nickName;
+      bookInfo['add_time'] = new Date().toLocaleDateString();
+      bookInfo['status'] = 1;
+      db.collection('book_info').where({
+        isbn13: bookInfo.isbn13
+      }).get().then((res) => {
+        if (res.data.length > 0) {
+          wx.showToast({
+            title: '该图书已在库！',
+            success() {
+              wx.navigateBack({
+                delta: 1
+              })
+            }
+          })
+          that.setData({
+            shareLock: false,
+          })
+        } else {
+          db.collection('book_info').add({
+            data: bookInfo
+          }).then((res) => {
+            that.setData({
+              shareLock: false,
+            });
             wx.navigateBack({
               delta: 1
             })
-          }
-        })   
-      }else{
-        db.collection('book_info').add({
-          data:bookInfo
-        }).then((res)=>{
-          wx.navigateBack({
-            delta: 1
-          })
-        });
-      }
-    })
+          });
+        }
+      })
+    }
   }
 })

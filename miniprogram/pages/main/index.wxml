@@ -1,8 +1,9 @@
 <view class='container'>
+  
   <view class='wrapper'>
     <view class='main'>
       <image class='main__item-img--top' mode='widthFix' src='cloud://felibrary-e7f3f4.7824-felibrary-e7f3f4/20171002205158_77098_320.png'></image>
-      <block wx:for='{{userList}}' wx:key='{{index}}'>
+      <block wx:for='{{readerList}}' wx:key='{{index}}'>
         <view wx:if='{{index%2===0}}' class='main__item main__item--left'>
           <image class='main__good-img' src='{{item.reading_book.book_image}}' mode='aspectFill'></image>
           <view class='main__user-info'>

@@ -13,11 +13,23 @@ Page({
         that.setData({
           bookList: books.concat(res.data)
         })
+        wx.stopPullDownRefresh();
       }
     })
   },
   onPullDownRefresh: function () {
-    this.getStoreData();
+    const that = this;
+    const db = wx.cloud.database();
+    db.collection('book_info').get({
+      success(res) {
+        that.setData({
+          bookList: res.data,
+          skipNum:0,
+        },function(){
+          wx.stopPullDownRefresh();
+        })
+      }
+    })
   },
 
   onReachBottom:function(){
@@ -29,14 +41,6 @@ Page({
     that.getStoreData(skipNum);
   },
 
-  onShow(){
-    const that = this;
-    let bookList = that.data.bookList;
-    this.setData({
-      bookList: bookList.slice(0, 20),
-      skipNum:0,
-    });
-  },
   onLoad: function (options) {
     const that = this;
     this.setData({

@@ -16,7 +16,6 @@ page{
 }
 .main__item-img--top{
   width: 350rpx;
-  height: 400rpx;
   border-radius: 10rpx;
   margin-right: 20rpx;
   margin-top:20rpx;

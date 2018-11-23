@@ -1,25 +1,29 @@
 Page({
 
   data: {
+    readerList:[],
     userList:[],
     skipNum:0,
   },
   onPullDownRefresh: function () {
     const that = this;
-    this.setData({
-      userList: [],
-      skipNum: 0,
-    }, function () {
-      that.getMainData();
-    });
-  },
-  onShow() {
-    const that = this;
-    let userList = that.data.userList;
-    this.setData({
-      userList: userList.slice(0, 20),
-      skipNum: 0,
-    });
+    const db = wx.cloud.database();
+    let users = that.data.userList;
+    let readers = that.data.readerList;
+    db.collection('user_info').get({
+      success(res) {
+        var temData = res.data.filter(function (item) {
+          return item.reading_status == 1;
+        })
+        that.setData({
+          userList: res.data,
+          readerList:temData,
+          skipNum:0
+        },function(){
+          wx.stopPullDownRefresh();
+        })
+      }
+    })
   },
   onReachBottom: function () {
     const that = this;
@@ -34,6 +38,7 @@ Page({
     const that = this;
     const db = wx.cloud.database();
     let users = that.data.userList;
+    let readers = that.data.readerList;
     skipNum = skipNum || 0;
     db.collection('user_info').limit(20).skip(skipNum).get({
       success(res) {
@@ -41,7 +46,8 @@ Page({
           return item.reading_status == 1;
         })
         that.setData({
-          userList: users.concat(temData)
+          userList: users.concat(res.data),
+          readerList: readers.concat(temData)
         })
       }
     })
