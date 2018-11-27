@@ -14,25 +14,9 @@ page{
   width: 100%;
   box-sizing: border-box;
 }
-.main__item-img--top{
-  width: 350rpx;
-  border-radius: 10rpx;
-  margin-right: 20rpx;
-  margin-top:20rpx;
-  float:right;
-  background: #fff;
-}
-.main__item-img--bottom{
-  width: 350rpx;
-  height: 180rpx;
-  border-radius: 10rpx;
-  margin-right: 20rpx;
-  margin-top:20rpx;
-  float:right;
-  background: #fff;
-}
 .main__item{
-  width: 350rpx;
+  width: 345rpx;
+  height: 300px;
   box-sizing: border-box;
   border-radius: 10rpx;
   background: #fff;
@@ -41,17 +25,12 @@ page{
   display: flex;
   flex-direction: column;
   padding: 10rpx;
-}
-.main__item--left{
-  float: left;
+  float:left;
   margin-left: 20rpx;
-}
-.main__item--right{
-  float:right;
-  margin-right:20rpx;
 }
 .main__good-img{
   width: 100%;
+  flex: 1;
 }
 .main__user-info{
   padding:20rpx;
@@ -62,6 +41,7 @@ page{
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
+  height: 45px;
 }
 .main__user-img{
   height: 48rpx;

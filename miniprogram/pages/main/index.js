@@ -1,7 +1,6 @@
 Page({
 
   data: {
-    readerList:[],
     userList:[],
     skipNum:0,
   },
@@ -12,12 +11,8 @@ Page({
     let readers = that.data.readerList;
     db.collection('user_info').get({
       success(res) {
-        var temData = res.data.filter(function (item) {
-          return item.reading_status == 1;
-        })
         that.setData({
           userList: res.data,
-          readerList:temData,
           skipNum:0
         },function(){
           wx.stopPullDownRefresh();
@@ -42,12 +37,8 @@ Page({
     skipNum = skipNum || 0;
     db.collection('user_info').limit(20).skip(skipNum).get({
       success(res) {
-        var temData = res.data.filter(function(item){
-          return item.reading_status == 1;
-        })
         that.setData({
           userList: users.concat(res.data),
-          readerList: readers.concat(temData)
         })
       }
     })
